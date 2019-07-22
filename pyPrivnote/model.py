@@ -30,9 +30,9 @@ class PrivMessage(object):
     @password.setter
     def password(self, value):
         if isinstance(value, str):
-            self._password = bytes(value, encoding="utf-8")
+            self._password = value.encode("utf-8")
         else:
-            self._password = bytes(value)
+            self._password = value.encode("utf-8")
 
     @property
     def link(self):
@@ -97,7 +97,9 @@ class PrivMessage(object):
 
         if not self._response.get("data"):
             if self._response.get("destroyed"):
-                raise NoteDestroyedException(note_id=self._id, destroyed=datetime.strptime(self._response["destroyed"], "%Y-%m-%dT%H:%M:%S.%f"))
+                raise NoteDestroyedException(note_id=self._id,
+                                             destroyed=datetime.strptime(self._response["destroyed"],
+                                                                         "%Y-%m-%dT%H:%M:%S.%f"))
             else:
                 raise PrivnoteException("No data in response")
         self._crypt_text = self._response['data']
