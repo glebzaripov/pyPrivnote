@@ -25,14 +25,16 @@ class PrivMessage(object):
 
     @property
     def password(self):
+        if not self._password:
+            raise ValueError("Password is not set - This note needs a password")
         return self._password.decode()
 
     @password.setter
     def password(self, value):
         if isinstance(value, str):
             self._password = value.encode("utf-8")
-        else:
-            self._password = value.encode("utf-8")
+        elif isinstance(value, bytearray) or isinstance(value, bytes):
+            self._password = value
 
     @property
     def link(self):
